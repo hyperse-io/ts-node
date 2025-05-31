@@ -19,8 +19,8 @@ import {
  */
 export function createMatchPath(
   absoluteBaseUrl: string,
-  paths: { [key: string]: Array<string> },
-  mainFields: (string | string[])[] = ['main'],
+  paths: Record<string, string[]>,
+  mainFields: Array<string | string[]> = ['main'],
   addMatchAll: boolean = true
 ) {
   const absolutePaths: ReadonlyArray<MappingEntry> = getAbsoluteMappingEntries(

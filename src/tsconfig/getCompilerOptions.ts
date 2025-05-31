@@ -6,34 +6,46 @@ import {
 } from './errors/index.js';
 import { TsConfigJsonLoader } from './TsConfigJsonLoader.js';
 
-export function getCompilerOptions(path: string): CompilerOptions {
-  const json = new TsConfigJsonLoader(path).loadSync();
-  const compilerOptions = json.compilerOptions;
-  const fields: string[] = ['baseUrl', 'rootDir', 'outDir'];
+// `strictBuiltinIteratorReturn` Built-in iterators are instantiated with a `TReturn` type of undefined instead of `any`.
+const ignoreCompilerOptionsFields: (keyof CompilerOptions)[] = [
+  'strictBuiltinIteratorReturn',
+];
+
+export function getCompilerOptions(configPath: string): CompilerOptions {
+  const configJson = new TsConfigJsonLoader(configPath).loadSync();
+  const compilerOptions = configJson.compilerOptions;
+  const requiredFields: Array<keyof CompilerOptions> = [
+    'baseUrl',
+    'rootDir',
+    'outDir',
+  ];
 
   if (!compilerOptions || Object.keys(compilerOptions).length === 0) {
     throw new TsConfigCompilerOptionsNotFoundError();
   }
 
-  if (!fields.every((field) => !!(compilerOptions as any)[field])) {
+  if (!requiredFields.every((field) => !!compilerOptions[field])) {
     throw new TsConfigFieldsNotFoundError();
   }
 
-  if (compilerOptions.baseUrl === './src') {
-    showWarns("`baseUrl` use './' instead of `./src`", path);
+  if (compilerOptions.baseUrl?.startsWith('./src')) {
+    showWarns(
+      "Recommend using './' instead of './src' for `baseUrl` in tsconfig",
+      configPath
+    );
   }
 
-  // compatibility to support old typescript before 5.6.
-  // strictBuiltinIteratorReturn - strictBuiltinIteratorReturn Built-in iterators are instantiated with a `TReturn` type of undefined instead of `any`.
-  delete compilerOptions.strictBuiltinIteratorReturn;
+  for (const field of ignoreCompilerOptionsFields) {
+    delete compilerOptions[field];
+  }
 
   return {
     paths: {},
     // https://forgemia.inra.fr/lipme/ts-biofiledetector/-/blob/main/tsconfig.json
     ...compilerOptions,
-    // force use `strict` to false here, we can avoid some unnecessary ts check errors
+    // Set `strict` to false to avoid unnecessary type checking
     strict: false,
-    // force use `verbatimModuleSyntax` to false here, we can avoid some unnecessary ts check errors
+    // Disable `verbatimModuleSyntax` to avoid unnecessary type checking of import/export syntax
     // https://www.typescriptlang.org/tsconfig/#verbatimModuleSyntax
     verbatimModuleSyntax: false,
   } as CompilerOptions;

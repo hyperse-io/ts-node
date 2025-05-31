@@ -1,17 +1,8 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { HYPERSE_TS_NODE, HYPERSE_TS_NODE_PATHS } from './constants.js';
-import { pathAlias } from './path-alias.js';
+import { HYPERSE_TS_NODE } from './constants.js';
+import { hpsTsNode } from './hpsTsNode.js';
 import { leftReplacer } from './tool/leftReplacer.js';
-
-/**
- * Checks if this library is already used in runtime.
- */
-export function isTsNodePathsRunning(): boolean {
-  return Object.getOwnPropertySymbols(process).some(
-    (s) => s === HYPERSE_TS_NODE_PATHS
-  );
-}
 
 /**
  * Checks if ts-node is already used in runtime.
@@ -47,10 +38,10 @@ export function pathResolve(
   }
 ): string {
   const execUrl = pathToFileURL(process.argv[1]).href;
-  const isTsNode = pathAlias.checkTsNode(execUrl);
+  const isTsNode = hpsTsNode.checkTsNode(execUrl);
   let resp = isTsNode
-    ? join(pathAlias.opts.rootDir, path)
-    : join(pathAlias.opts.outDir, path);
+    ? join(hpsTsNode.opts.rootDir, path)
+    : join(hpsTsNode.opts.outDir, path);
 
   if (options?.ext && isTsNode) {
     resp = resp.replace(/\.mjs$/gi, '.mts').replace(/\.js$/gi, '.ts');

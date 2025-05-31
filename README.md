@@ -1,20 +1,20 @@
-# @hyperse/ts-node-paths
+# @hyperse/ts-node
 
 <p align="left">
-  <a aria-label="Build" href="https://github.com/hyperse-io/ts-node-paths/actions?query=workflow%3ACI">
-    <img alt="build" src="https://img.shields.io/github/actions/workflow/status/hyperse-io/ts-node-paths/ci-integrity.yml?branch=main&label=ci&logo=github&style=flat-quare&labelColor=000000" />
+  <a aria-label="Build" href="https://github.com/hyperse-io/ts-node/actions?query=workflow%3ACI">
+    <img alt="build" src="https://img.shields.io/github/actions/workflow/status/hyperse-io/ts-node/ci-integrity.yml?branch=main&label=ci&logo=github&style=flat-quare&labelColor=000000" />
   </a>
-  <a aria-label="stable version" href="https://www.npmjs.com/package/@hyperse/ts-node-paths">
-    <img alt="stable version" src="https://img.shields.io/npm/v/%40hyperse%2Fts-node-paths?branch=main&label=version&logo=npm&style=flat-quare&labelColor=000000" />
+  <a aria-label="stable version" href="https://www.npmjs.com/package/@hyperse/ts-node">
+    <img alt="stable version" src="https://img.shields.io/npm/v/%40hyperse%2Fts-node?branch=main&label=version&logo=npm&style=flat-quare&labelColor=000000" />
   </a>
   <a>
-    <img alt="LoC" src="https://img.shields.io/bundlephobia/min/%40hyperse%2Fts-node-paths?style=flat-quare&labelColor=000000" />
+    <img alt="LoC" src="https://img.shields.io/bundlephobia/min/%40hyperse%2Fts-node?style=flat-quare&labelColor=000000" />
   </a>
-  <a aria-label="Top language" href="https://github.com/hyperse-io/ts-node-paths/search?l=typescript">
-    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/hyperse-io/ts-node-paths?style=flat-square&labelColor=000&color=blue">
+  <a aria-label="Top language" href="https://github.com/hyperse-io/ts-node/search?l=typescript">
+    <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/hyperse-io/ts-node?style=flat-square&labelColor=000&color=blue">
   </a>
-  <a aria-label="Licence" href="https://github.com/hyperse-io/ts-node-paths/blob/main/LICENSE">
-    <img alt="Licence" src="https://img.shields.io/github/license/hyperse-io/ts-node-paths?style=flat-quare&labelColor=000000" />
+  <a aria-label="Licence" href="https://github.com/hyperse-io/ts-node/blob/main/LICENSE">
+    <img alt="Licence" src="https://img.shields.io/github/license/hyperse-io/ts-node?style=flat-quare&labelColor=000000" />
   </a>
 </p>
 
@@ -38,18 +38,14 @@ import { Gegege } from '@alias-b/gegege.js';
 
 ## Disclaimer
 
-This package is designed to work in end-user backend aplications for unit-testing purpose (because of how [module alias works](https://github.com/ilearnio/module-alias/blob/dev/README.md#using-within-another-npm-package)). So this probably doesn't work in front-end applications, or apps that uses a bundler (like webpack for example).
+This package is designed to work in end-user backend aplications for unit-testing purpose
 
 Also, this package is **experimental** and probably can generate unexpected behaviors, or performance issues. For that reason, <u>**you must test intensively this package in all possible use cases if do you want to implement in production.**</u>
 
 ## Installation
 
-We don't need to installed ts-node, now is the moment:
-
-just install this package as a dependency:
-
 ```bash
-npm i --save @hyperse/ts-node-paths
+npm i --save @hyperse/ts-node
 ```
 
 ## Usage
@@ -117,31 +113,31 @@ This package reads the `tsconfig.json` file (and is capable to find values if th
 
 ### ENV
 
-Path to tsconfig file. Environment: `TS_NODE_PATHS_PROJECT`
+Path to tsconfig file. Environment: `HPS_TS_NODE_PROJECT`
 
 ```ts
 runTsScript(
   program,
   {
     env: {
-      TS_NODE_PATHS_PROJECT: 'tsconfig.json',
+      HPS_TS_NODE_PROJECT: 'tsconfig.json',
     },
   },
   ...args
 );
 ```
 
-Enable `verbose` status messages by Environment: `HYPERSE_TS_NODE_PATHS_VERBOSE`
+Enable `verbose` status messages by Environment: `'HPS_TS_NODE_VERBOSE': 'true'`
 
 The fields listed in the example of above are all required in order to the correct working of the package.
 
-### with **ESM** `type:module` projects
+### for **ESM** `type:module` projects with node>=20.6
 
-- scripts (node 20+)
+- scripts (node 20.6+)
 
   ```json
   {
-    "serve": "yarn node --import=@hyperse/ts-node-paths/register ./config/dev-server.ts"
+    "serve": "yarn node --import=@hyperse/ts-node/register ./config/dev-server.ts"
   }
   ```
 
@@ -154,21 +150,10 @@ This package includes `dotnet` package, so if you want, create a `.env` file in 
 If you want to check if `ts-node` is running, you can execute this function:
 
 ```ts
-import { isTsNodeRunning } from '@hyperse/ts-node-paths';
+import { isTsNodeRunning } from '@hyperse/ts-node';
 
 const response = isTsNodeRunning(); // Returns a boolean
-console.log('if ts-node is running?', response);
-```
-
-### Function `isPathAliasRunning`
-
-If you want to check if `@hyperse/ts-node-paths` is running, you can execute this function:
-
-```ts
-import { isTsNodePathsRunning } from '@hyperse/ts-node-paths';
-
-const response = isTsNodePathsRunning(); // Returns a boolean
-console.log('if this package is running?', response);
+console.log('if hps-ts-node is running?', response);
 ```
 
 ### Function `pathResolve`
@@ -176,7 +161,7 @@ console.log('if this package is running?', response);
 Resolve any subfolder of `"rootDir"` depending if **ts-node** is running. For example, imagine do you want to resolve the path `"./src/folder-a/*"`:
 
 ```ts
-import { pathResolve } from '@hyperse/ts-node-paths';
+import { pathResolve } from '@hyperse/ts-node';
 
 const path = pathResolve('./folder-a/*');
 console.log('path:', path);
@@ -185,8 +170,8 @@ console.log('path:', path);
 With **ts-node** the output is:
 
 ```bash
-node --loader @hyperse/ts-node-paths/esm ./src/index.ts
-node --import=@hyperse/ts-node-paths/register ./scripts/build.ts
+node --loader @hyperse/ts-node/esm ./src/index.ts # for esm project with node<=20.5, deprecated
+node --import=@hyperse/ts-node/register ./scripts/build.ts # for esm project with node>=20.6
 
 # path: src/folder-a/*
 ```
@@ -194,8 +179,8 @@ node --import=@hyperse/ts-node-paths/register ./scripts/build.ts
 With the transpiled code:
 
 ```bash
-node --loader @hyperse/ts-node-paths/esm ./dist/index.js
-node --import=@hyperse/ts-node-paths/register ./dist/index.js
+node --loader @hyperse/ts-node/esm ./dist/index.js # for esm project with node<=20.5, deprecated
+node --import=@hyperse/ts-node/register ./dist/index.js # for esm project with node>=20.6
 
 # path: dist/folder-a/*
 ```

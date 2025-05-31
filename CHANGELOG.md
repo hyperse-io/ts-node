@@ -1,4 +1,4 @@
-# @hyperse/ts-node-paths
+# @hyperse/ts-node
 
 ## 1.0.12
 

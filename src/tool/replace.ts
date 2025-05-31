@@ -1,14 +1,17 @@
 import { dirname, join, resolve } from 'path';
 import { pathToFileURL } from 'url';
-import { pathAlias } from '../path-alias.js';
-import { Tsconfig } from '../tsconfig/Tsconfig.js';
+import { hpsTsNode } from '../hpsTsNode.js';
+import { TsConfig } from '../tsconfig/TsConfig.js';
 import { leftReplacer } from './leftReplacer.js';
-import { searchMonoProjectDir } from './searchMonoProjectDir.js';
+import { searchProjectDir } from './searchProjectDir.js';
 
-export function replace(input: string, parentUrl?: string): string | undefined {
+export function replace(
+  specifier: string,
+  parentUrl?: string
+): string | undefined {
   // ParentURL is required
   if (typeof parentUrl !== 'string') {
-    return input;
+    return specifier;
   }
 
   // Check if inside of...
@@ -19,22 +22,23 @@ export function replace(input: string, parentUrl?: string): string | undefined {
           .replace(/^(\\|\/)+/g, '')
           .replace(/\//g, '\\');
 
-  const projectCwd = searchMonoProjectDir({
+  const projectCwd = searchProjectDir({
     cwd: dirname(path),
   });
 
-  const tsconfig = new Tsconfig(
+  // handle mono repo dependency project tsconfig path
+  const projectTsconfig = new TsConfig(
     projectCwd ? join(projectCwd, './tsconfig.json') : undefined
   );
 
-  const tsconfigOpts = tsconfig.getOptions(projectCwd);
+  const tsconfigOpts = projectTsconfig.getCompilerOptions(projectCwd);
 
-  const base = pathAlias.isTsNode
-    ? resolve(tsconfigOpts.baseUrl)
+  const base = hpsTsNode.isTsNode
+    ? tsconfigOpts.baseUrl
     : leftReplacer(
-        resolve(tsconfigOpts.baseUrl),
-        resolve(tsconfigOpts.rootDir),
-        resolve(tsconfigOpts.outDir)
+        tsconfigOpts.baseUrl,
+        tsconfigOpts.rootDir,
+        tsconfigOpts.outDir
       );
 
   if (path.startsWith(base)) {
@@ -46,17 +50,17 @@ export function replace(input: string, parentUrl?: string): string | undefined {
       }))
       .sort((a, b) => b.alias.length - a.alias.length);
 
-    const found = pathEntries.find(({ alias }) => input.startsWith(alias));
+    const found = pathEntries.find(({ alias }) => specifier.startsWith(alias));
 
     if (found) {
       const fullPath = resolve(base, found.path);
       const result =
-        input !== found.alias
-          ? join(fullPath, leftReplacer(input, found.alias, ''))
+        specifier !== found.alias
+          ? join(fullPath, leftReplacer(specifier, found.alias, ''))
           : fullPath;
 
       let out: string;
-      if (pathAlias.isTsNode) {
+      if (hpsTsNode.isTsNode) {
         out = result.replace(/\.js$/gi, '.ts').replace(/\.mjs$/gi, '.mts');
       } else {
         out = result.replace(/\.ts$/gi, '.js').replace(/\.mts$/gi, '.mjs');

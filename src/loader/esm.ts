@@ -1,41 +1,28 @@
-import {
-  load as loadTs,
-  type LoadFn,
-  resolve as resolveTs,
-  type ResolveFn,
-} from 'ts-node/esm';
+import type { LoadHook, ResolveHook } from 'module';
 import { pathToFileURL } from 'url';
-import { pathAlias } from '../path-alias.js';
+import { load as loadTs, resolve as resolveTs } from '@swc-node/register/esm';
+import { hpsTsNode } from '../hpsTsNode.js';
 import { createMatchPath } from '../tool/createMatchPath.js';
 import { replace } from '../tool/replace.js';
-import '../types/ts-node.d.js';
 
-pathAlias.showInConsole();
+hpsTsNode.showInConsole();
 
-const matchPath = createMatchPath(pathAlias.opts.baseUrl, pathAlias.opts.paths);
+const matchPath = createMatchPath(hpsTsNode.opts.baseUrl, hpsTsNode.opts.paths);
 
-export async function load(
-  url: string,
-  context: { conditions: string[]; format: string },
-  defaultLoad: LoadFn
-): Promise<unknown> {
-  const isTsNode = pathAlias.checkTsNode(url);
+export const load: LoadHook = async (url, context, nextLoad) => {
+  const isTsNode = hpsTsNode.checkTsNode(url);
   if (isTsNode) {
-    return loadTs(url, context, defaultLoad);
+    return loadTs(url, context, nextLoad);
   } else {
-    return defaultLoad(url, context, defaultLoad);
+    return nextLoad(url, context);
   }
-}
+};
 
 // Use the ts-node mechanism only if applied
-export const resolve: ResolveFn = async (
-  specifier,
-  context,
-  defaultResolve
-) => {
-  const isTsNode = pathAlias.checkTsNode(specifier, context);
+export const resolve: ResolveHook = async (specifier, context, nextResolve) => {
+  const isTsNode = hpsTsNode.checkTsNode(specifier, context);
   if (isTsNode) {
-    // USE TS-NODE TO HANDLE THE INCOMING MODULES
+    // Handle module resolution using ts-node and path mapping
     const lastIndexOfIndex = specifier.lastIndexOf('/index.js');
     if (lastIndexOfIndex !== -1) {
       // Handle index.js
@@ -45,7 +32,7 @@ export const resolve: ResolveFn = async (
         return resolveTs(
           pathToFileURL(`${match}/index.js`).href,
           context,
-          defaultResolve
+          nextResolve
         );
       }
     } else {
@@ -57,7 +44,7 @@ export const resolve: ResolveFn = async (
         return resolveTs(
           pathToFileURL(`${match}${ext}`).href,
           context,
-          defaultResolve
+          nextResolve
         );
       } else if (typeof context.parentURL === 'string') {
         const newPath = replace(specifier, context.parentURL);
@@ -67,18 +54,18 @@ export const resolve: ResolveFn = async (
               ? pathToFileURL(newPath).href
               : newPath;
 
-          return resolveTs(newUrl, context, defaultResolve);
+          return resolveTs(newUrl, context, nextResolve);
         }
       }
     }
-    return resolveTs(specifier, context, defaultResolve);
+    return resolveTs(specifier, context, nextResolve);
   } else {
     // Use node directly, skipping ts-node
     const newEspecif = replace(specifier, context.parentURL);
     if (typeof newEspecif === 'string') {
-      return defaultResolve(newEspecif, context, defaultResolve);
+      return nextResolve(newEspecif, context);
     } else {
-      return defaultResolve(specifier, context, defaultResolve);
+      return nextResolve(specifier, context);
     }
   }
 };
