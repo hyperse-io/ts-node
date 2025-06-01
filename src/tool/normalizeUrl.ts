@@ -1,10 +1,10 @@
 /**
  * Normalize the parentUrl to the correct path.
- * - `posix`: /Users/tianyingchun/Documents/hyperse-io/ts-node-paths/tests/cli-test-program.ts
- * - `windows`: C:\\Users\\tianyingchun\\Documents\\hyperse-io\\ts-node-paths\\tests\\cli-test-program.ts
+ * - `posix`: /Users/tianyingchun/Documents/hyperse-io/ts-node/tests/cli-test-program.ts
+ * - `windows`: C:\\Users\\tianyingchun\\Documents\\hyperse-io\\ts-node\\tests\\cli-test-program.ts
  * @param parentUrl - The parentUrl to normalize.
- * - posix: 'file:///Users/tianyingchun/Documents/hyperse-io/ts-node-paths/src/index.ts'
- * - windows: 'file:///C:/Users/tianyingchun/Documents/hyperse-io/ts-node-paths/src/index.ts'
+ * - posix: 'file:///Users/tianyingchun/Documents/hyperse-io/ts-node/src/index.ts'
+ * - windows: 'file:///C:/Users/tianyingchun/Documents/hyperse-io/ts-node/src/index.ts'
  * @returns The normalized parentUrl.
  */
 export function normalizeParentUrl(parentUrl: string): string {

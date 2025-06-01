@@ -4,7 +4,7 @@ import { TsConfigLoader } from '../../src/tsconfig/TsConfigLoader.js';
 import { getDirname } from '../test-utils.js';
 
 describe('TsConfigLoader', () => {
-  // /Users/xxxx/Documents/hyperse-io/ts-node-paths/tsconfig.json
+  // /Users/xxxx/Documents/hyperse-io/ts-node/tsconfig.json
   const rootTsConfigjson = resolve(process.cwd(), 'tsconfig.json');
 
   it('should load tsconfig.json successfully', () => {
