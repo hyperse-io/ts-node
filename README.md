@@ -22,10 +22,15 @@ A TypeScript path alias resolver for Node.js applications that works seamlessly 
 ## Features
 
 - 🔄 Automatic path resolution for both source (`src`) and compiled (`dist`) directories
-- 🎯 Full TypeScript path alias support via `tsconfig.json`
+- 🎯 Full TypeScript path alias support via `tsconfig.json` with extends and module resolution
 - 🚀 ESM-first design with support for Node.js 20.6+
 - 🔧 Zero configuration required - works out of the box
 - 🛠️ Utility functions for dynamic path resolution
+- ✨ Support for TypeScript decorators and metadata reflection
+- 🔍 Smart path alias resolution
+- 🎭 Seamless development and production environments
+- ⚡️ Lightning fast performance with SWC
+- 🧪 Comprehensive test coverage
 
 ## ⚠️ Important Notice
 
@@ -139,7 +144,8 @@ const result = matcher('@utils/helper', {
 
 1. Requires a valid `tsconfig.json` file in the project root
 2. Path resolution must be within the `rootDir` directory
-3. All required properties must be accessible in the tsconfig inheritance chain
+3. All required properties must be accessible in the `tsconfig` inheritance chain
+4. Not recommended for production use without thorough testing and validation
 
 ## Contributing
 
