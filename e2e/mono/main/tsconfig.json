@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@test/project-a": ["../projectA/src/index.ts"],
+      "@test/project-b": ["../projectB/src/index.ts"],
+      "@test/project-c": ["../projectC/src/index.js"]
+    }
+  }
+}

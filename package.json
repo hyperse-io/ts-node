@@ -1,10 +1,9 @@
 {
-  "name": "@hyperse/ts-node-paths",
-  "version": "1.0.12",
-  "description": "Executes a command using `file ...arguments`, supports `.ts` file for esm type module.",
+  "name": "@hyperse/ts-node",
+  "version": "1.0.0",
+  "description": "Run TypeScript with node without typechecking",
   "keywords": [
     "hyperse",
-    "ts",
     "typescript",
     "tsconfig",
     "ts-config",
@@ -13,13 +12,14 @@
     "ts node esm",
     "ts node paths",
     "tsconfig.json",
-    "path",
-    "alias",
-    "mapping"
+    "path alias",
+    "path mapping",
+    "swc node",
+    "rust ts-node"
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:hyperse-io/ts-node-paths.git"
+    "url": "git@github.com:hyperse-io/ts-node.git"
   },
   "type": "module",
   "exports": {
@@ -43,12 +43,13 @@
     "./index.js"
   ],
   "scripts": {
-    "build": "tsx ./scripts/build.ts",
+    "build": "node --import @swc-node/register/esm-register ./scripts/build.ts",
     "next": "next build",
     "lint": "eslint .",
     "lint-fix": "yarn lint --fix",
     "test": "run-s test-unit",
     "test-unit": "vitest run",
+    "test-task": "vitest run",
     "typecheck": "tsc --project ./tsconfig.json --noEmit",
     "lint-staged-files": "lint-staged --allow-empty",
     "changeset": "changeset",
@@ -61,35 +62,36 @@
       "path": "cz-conventional-changelog"
     }
   },
-  "resolutions": {
-    "eslint-plugin-markdown": "5.1.0"
-  },
+  "workspaces": [
+    "./",
+    "./e2e/mono/*",
+    "./e2e/normal"
+  ],
   "dependencies": {
+    "@swc-node/register": "^1.10.10",
+    "@swc/core": "^1.11.29",
     "colorette": "^2.0.20",
-    "get-tsconfig": "^4.10.0",
+    "get-tsconfig": "^4.10.1",
     "package-up": "^5.0.0",
-    "ts-node": "11.0.0-beta.1",
     "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "0.5.1",
-    "@changesets/cli": "2.29.4",
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.4",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@hyperse/eslint-config-hyperse": "^1.4.4",
-    "@types/node": "^22.15.18",
-    "commitizen": "4.3.1",
-    "cz-conventional-changelog": "3.3.0",
-    "eslint": "^9.27.0",
-    "execa": "^9.5.3",
-    "husky": "9.1.7",
-    "lint-staged": "16.0.0",
+    "@types/node": "^22.15.29",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.28.0",
+    "execa": "^9.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.0",
     "npm-run-all": "^4.1.5",
     "tsup": "^8.5.0",
-    "tsx": "^4.19.4",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5",
-    "vitest": "^3.1.3"
+    "vitest": "^3.1.4"
   },
   "packageManager": "yarn@4.9.1",
   "engines": {

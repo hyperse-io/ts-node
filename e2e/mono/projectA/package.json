@@ -1,0 +1,12 @@
+{
+  "name": "@test/project-a",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --import @hyperse/ts-node/register src/index.ts"
+  },
+  "dependencies": {
+    "@test/project-b": "workspace:*",
+    "@test/project-c": "workspace:*"
+  }
+}

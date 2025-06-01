@@ -22,7 +22,7 @@ A clear and concise description of what you expected to happen.
 
 **Environment (please complete the following information):**
 
-- @hyperse/ts-node-paths version:
+- @hyperse/ts-node version:
 - Nodejs version
 
 **Additional context**
