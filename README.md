@@ -1,6 +1,6 @@
 # @hyperse/ts-node
 
-Run TypeScript with node without typechecking
+Faster TypeScript/JavaScript transformer without typechecking and node-gyp and postinstall script.
 
 <p align="left">
   <a aria-label="Build" href="https://github.com/hyperse-io/ts-node/actions?query=workflow%3ACI">
@@ -34,6 +34,7 @@ This package is:
 - Designed primarily for backend applications and unit testing
 - Currently in **experimental** status
 - Requires thorough testing before production use
+- Runtime sourcemap support via `sourceMap: true` in `tsconfig.json` for enhanced debugging
 
 ## Installation
 
@@ -51,6 +52,7 @@ npm install --save @hyperse/ts-node
     "rootDir": "./src",
     "outDir": "./dist",
     "baseUrl": "./",
+    "sourceMap": true,
     "paths": {
       "@utils/*": ["./src/utils/*"],
       "@components/*": ["./src/components/*"],
@@ -89,7 +91,7 @@ For Node.js ≤20.5 (deprecated):
 | Variable                    | Description              | Default         |
 | --------------------------- | ------------------------ | --------------- |
 | `HPS_TS_NODE_PROJECT`       | Path to tsconfig file    | `tsconfig.json` |
-| `HPS_TS_NODE_LOG_LEVEL`     | Log level (0-4)          | `2` Info        |
+| `HPS_TS_NODE_LOG_LEVEL`     | Log level [0-4]          | `2` Info        |
 | `HPS_TS_NODE_LOG_TIMESTAMP` | Enable timestamp in logs | `false`         |
 
 ## API Reference
@@ -98,7 +100,7 @@ For Node.js ≤20.5 (deprecated):
 
 Create a path resolver for your aliases:
 
-```typescript
+```ts
 import { createPathMatcher, HpsSpecifierLoader } from '@hyperse/ts-node';
 import path from 'path';
 
@@ -124,13 +126,14 @@ const result = matcher('@utils/helper', {
    - Avoid conflicts with built-in module names
 
 2. **Project Structure**
-   ```
-   project/
-   ├── src/          # Source files
-   ├── dist/         # Compiled files
-   ├── tsconfig.json # TypeScript configuration
-   └── package.json  # Project configuration
-   ```
+
+```text
+  project/
+  ├── src/          # Source files
+  ├── dist/         # Compiled files
+  ├── tsconfig.json # TypeScript configuration
+  └── package.json  # Project configuration
+```
 
 ## Limitations
 
@@ -140,7 +143,7 @@ const result = matcher('@utils/helper', {
 
 ## Contributing
 
-Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting pull requests.
+Contributions are welcome! Please read our [contributing guidelines](https://github.com/hyperse-io/.github/blob/main/CONTRIBUTING.md) before submitting pull requests.
 
 ## License
 

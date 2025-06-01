@@ -1,7 +1,7 @@
 {
   "name": "@hyperse/ts-node",
   "version": "1.0.1",
-  "description": "Run TypeScript with node without typechecking",
+  "description": "Fast TypeScript transformer in Node.js using SWC - no type checking",
   "keywords": [
     "hyperse",
     "typescript",

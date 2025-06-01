@@ -4,6 +4,7 @@
     "rootDir": ".",
     "baseUrl": "./",
     "outDir": "dist",
+    "sourceMap": true,
     "types": ["vitest/globals", "node"]
   }
 }
