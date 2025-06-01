@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@utils/*": ["./src/utils/*"],
+      "@utils/printb": ["./src/utils/print.ts"],
+      "@test/project-c": ["../projectC/src/index.js"]
+    }
+  }
+}

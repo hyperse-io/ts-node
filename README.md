@@ -1,5 +1,7 @@
 # @hyperse/ts-node
 
+Run TypeScript with node without typechecking
+
 <p align="left">
   <a aria-label="Build" href="https://github.com/hyperse-io/ts-node/actions?query=workflow%3ACI">
     <img alt="build" src="https://img.shields.io/github/actions/workflow/status/hyperse-io/ts-node/ci-integrity.yml?branch=main&label=ci&logo=github&style=flat-quare&labelColor=000000" />
@@ -18,208 +20,131 @@
   </a>
 </p>
 
-A package to bind paths alias, resolving the `source` directory when the app is launched with ts-node, or resolving the `out` directory when ts-node isn't used. Includes some utilities in case if you need to generate paths dinamically depending of the code that is running.
+A TypeScript path alias resolver for Node.js applications that works seamlessly with both development (ts-node) and production environments. This package automatically resolves path aliases based on your `tsconfig.json` configuration, eliminating the need for complex relative imports.
 
-This package has been designed to work with ESM projects (using [--loader](https://nodejs.org/api/esm.html#loaders) flag).
+## Features
 
-With this package, you can forget about those ugly imports like:
+- 🔄 Automatic path resolution for both source (`src`) and compiled (`dist`) directories
+- 🎯 Full TypeScript path alias support via `tsconfig.json`
+- 🚀 ESM-first design with support for Node.js 20.6+
+- 🔧 Zero configuration required - works out of the box
+- 🛠️ Utility functions for dynamic path resolution
 
-```ts
-import { Jajaja } from '../../../../../../../jajaja.js';
-import { Gegege } from '../../../../../gegege.js';
-```
+## ⚠️ Important Notice
 
-...and instead you can use alias like this (with the power of intellisense):
+This package is:
 
-```ts
-import { Jajaja } from '@alias-a/jajaja.js';
-import { Gegege } from '@alias-b/gegege.js';
-```
-
-## Disclaimer
-
-This package is designed to work in end-user backend aplications for unit-testing purpose
-
-Also, this package is **experimental** and probably can generate unexpected behaviors, or performance issues. For that reason, <u>**you must test intensively this package in all possible use cases if do you want to implement in production.**</u>
+- Designed primarily for backend applications and unit testing
+- Currently in **experimental** status
+- Requires thorough testing before production use
 
 ## Installation
 
 ```bash
-npm i --save @hyperse/ts-node
+npm install --save @hyperse/ts-node
 ```
 
-## Usage
+## Quick Start
 
-To explain all features of this package, we will use this project estructure as example:
-
-```bash
-# Your current working directory
-project-folder
-│   # The project dependencies
-├── node_modules
-│
-│   # The transpiled files
-├── dist
-│   │   # The file when the app starts
-│   ├── index.js
-│   │
-│   ├── folder-a
-│   │   ├── ...
-│   │   └── ...
-│   ├── folder-b
-│   │   ├── ...
-│   │   └── ...
-│   └── ...
-│
-│   # The source code
-├── src
-│   │   # The file when the app starts
-│   ├── index.ts
-│   │
-│   ├── folder-a
-│   │   ├── ...
-│   │   └── ...
-│   ├── folder-b
-│   │   ├── ...
-│   │   └── ...
-│   ├── file-x.ts
-│   └── ...
-│
-│   # The project configuration files
-├── package.json
-├── package-lock.json
-└── tsconfig.json
-```
-
-### Configure your `tsconfig.json`
-
-This package reads the `tsconfig.json` file (and is capable to find values if the file extends another configuration files) to declare the alias. A typical configuration coul be similar to this:
+### 1. Configure `tsconfig.json`
 
 ```json
 {
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "paths": {
-      "@file-x": ["./file-x.ts"],
-      "@alias-a/*": ["./folder-a/*"],
-      "@alias-b/*": ["./folder-b/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@components/*": ["./src/components/*"],
+      "@config": ["./src/config.ts"]
     }
   }
 }
 ```
 
-### ENV
+### 2. Usage in ESM Projects
 
-Path to tsconfig file. Environment: `HPS_TS_NODE_PROJECT`
+For Node.js 20.6+:
 
-```ts
-runTsScript(
-  program,
-  {
-    env: {
-      HPS_TS_NODE_PROJECT: 'tsconfig.json',
-    },
-  },
-  ...args
-);
-```
-
-Enable `verbose` status messages by Environment: `'HPS_TS_NODE_VERBOSE': 'true'`
-
-The fields listed in the example of above are all required in order to the correct working of the package.
-
-### for **ESM** `type:module` projects with node>=20.6
-
-- scripts (node 20.6+)
-
-  ```json
-  {
-    "serve": "yarn node --import=@hyperse/ts-node/register ./config/dev-server.ts"
+```json
+{
+  "scripts": {
+    "dev": "node --import=@hyperse/ts-node/register ./src/index.ts",
+    "start": "node --import=@hyperse/ts-node/register ./dist/index.js"
   }
-  ```
-
-## Utilities
-
-This package includes `dotnet` package, so if you want, create a `.env` file in your current working directory.
-
-### Function `isTsNodeRunning`
-
-If you want to check if `ts-node` is running, you can execute this function:
-
-```ts
-import { isTsNodeRunning } from '@hyperse/ts-node';
-
-const response = isTsNodeRunning(); // Returns a boolean
-console.log('if hps-ts-node is running?', response);
+}
 ```
 
-### Function `pathResolve`
+For Node.js ≤20.5 (deprecated):
 
-Resolve any subfolder of `"rootDir"` depending if **ts-node** is running. For example, imagine do you want to resolve the path `"./src/folder-a/*"`:
-
-```ts
-import { pathResolve } from '@hyperse/ts-node';
-
-const path = pathResolve('./folder-a/*');
-console.log('path:', path);
+```json
+{
+  "scripts": {
+    "dev": "node --loader @hyperse/ts-node/esm ./src/index.ts",
+    "start": "node --loader @hyperse/ts-node/esm ./dist/index.js"
+  }
+}
 ```
 
-With **ts-node** the output is:
+## Environment Variables
 
-```bash
-node --loader @hyperse/ts-node/esm ./src/index.ts # for esm project with node<=20.5, deprecated
-node --import=@hyperse/ts-node/register ./scripts/build.ts # for esm project with node>=20.6
+| Variable                    | Description              | Default         |
+| --------------------------- | ------------------------ | --------------- |
+| `HPS_TS_NODE_PROJECT`       | Path to tsconfig file    | `tsconfig.json` |
+| `HPS_TS_NODE_LOG_LEVEL`     | Log level (0-4)          | `2` Info        |
+| `HPS_TS_NODE_LOG_TIMESTAMP` | Enable timestamp in logs | `false`         |
 
-# path: src/folder-a/*
+## API Reference
+
+### `createPathMatcher()`
+
+Create a path resolver for your aliases:
+
+```typescript
+import { createPathMatcher, HpsSpecifierLoader } from '@hyperse/ts-node';
+import path from 'path';
+
+const matcher = createPathMatcher('/project/root', {
+  '@utils/*': ['src/utils/*'],
+  '@components/*': ['src/components/*'],
+});
+
+// Resolve paths
+const result = matcher('@utils/helper', {
+  extensions: ['.ts', '.js'],
+  // Optional: custom file existence checker
+  fileExists: (filePath) => filePath.includes('index'),
+});
 ```
 
-With the transpiled code:
+## Best Practices
 
-```bash
-node --loader @hyperse/ts-node/esm ./dist/index.js # for esm project with node<=20.5, deprecated
-node --import=@hyperse/ts-node/register ./dist/index.js # for esm project with node>=20.6
+1. **Path Aliases**
 
-# path: dist/folder-a/*
-```
+   - Keep aliases simple and intuitive
+   - Use consistent naming patterns
+   - Avoid conflicts with built-in module names
 
-Optionally receives as second parameter an object with this options:
-
-- `"absolute"`:
-
-  > If `true`, returns the full path, otherwise returns the path relative to the current working directory.
-
-- `"ext"`:
-  > If true, converts the extensions `*.ts` / `*.mts` / `*.cts` / `*.js` / `*.mjs` / `*.cjs` depending if **ts-node** is running or not.
+2. **Project Structure**
+   ```
+   project/
+   ├── src/          # Source files
+   ├── dist/         # Compiled files
+   ├── tsconfig.json # TypeScript configuration
+   └── package.json  # Project configuration
+   ```
 
 ## Limitations
 
-- The library requires a `"tsconfig.json"` file into the current working directory to work. Doesn't matter if that file extends another file, or be a part of a set of inhetirance, **while all required properties are accesible through its ancestors.**
+1. Requires a valid `tsconfig.json` file in the project root
+2. Path resolution must be within the `rootDir` directory
+3. All required properties must be accessible in the tsconfig inheritance chain
 
-- The resolve output between `"baseURL"` and the `"paths"` declared in the `"tsconfig.json"` file must always return a path inside of `"rootDir"` folder.
-- Recommand setup your `tsconfig.json`, `baseUrl` to `./`
+## Contributing
 
-```ts
-{
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    // If the code contains import 'events' and it coincidentally matches the paths baseUrl /src/events directory,
-    // it may cause the built-in events module to be incorrectly resolved as a relative module of the project.
-    // NOTE: recommmand config baseUrl:'./' Instead of use `./src`
-    // Avoid run into issue of "builtin module `events` wrong resolved as `./src/events`"
-    "baseUrl": "./",
-    "allowJs": false,
-    "noEmit": false,
-    "incremental": true,
-    "paths": {
-      "@hyperse/testing": ["../../packages/testing/src/index.js"]
-    },
-    "types": ["vitest/globals"]
-  },
-  "exclude": ["**/node_modules", "**/.*/", "dist", "build"]
-}
+Contributions are welcome! Please read our [contributing guidelines](CONTRIBUTING.md) before submitting pull requests.
 
-```
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

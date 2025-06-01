@@ -1,3 +1,3 @@
 export * from './errors/index.js';
 export { TsConfig as Tsconfig } from './TsConfig.js';
-export { TsConfigJsonLoader } from './TsConfigJsonLoader.js';
+export { TsConfigLoader as TsConfigJsonLoader } from './TsConfigLoader.js';

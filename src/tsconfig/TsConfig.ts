@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 import { getCompilerOptions } from './getCompilerOptions.js';
 
 export class TsConfig {

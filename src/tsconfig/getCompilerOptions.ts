@@ -1,10 +1,9 @@
-import { showWarns } from '../tool/showWarns.js';
 import { type CompilerOptions } from '../types/tsconfig.js';
 import {
   TsConfigCompilerOptionsNotFoundError,
   TsConfigFieldsNotFoundError,
 } from './errors/index.js';
-import { TsConfigJsonLoader } from './TsConfigJsonLoader.js';
+import { TsConfigLoader } from './TsConfigLoader.js';
 
 // `strictBuiltinIteratorReturn` Built-in iterators are instantiated with a `TReturn` type of undefined instead of `any`.
 const ignoreCompilerOptionsFields: (keyof CompilerOptions)[] = [
@@ -12,7 +11,7 @@ const ignoreCompilerOptionsFields: (keyof CompilerOptions)[] = [
 ];
 
 export function getCompilerOptions(configPath: string): CompilerOptions {
-  const configJson = new TsConfigJsonLoader(configPath).loadSync();
+  const configJson = new TsConfigLoader(configPath).loadSync();
   const compilerOptions = configJson.compilerOptions;
   const requiredFields: Array<keyof CompilerOptions> = [
     'baseUrl',
@@ -26,13 +25,6 @@ export function getCompilerOptions(configPath: string): CompilerOptions {
 
   if (!requiredFields.every((field) => !!compilerOptions[field])) {
     throw new TsConfigFieldsNotFoundError();
-  }
-
-  if (compilerOptions.baseUrl?.startsWith('./src')) {
-    showWarns(
-      "Recommend using './' instead of './src' for `baseUrl` in tsconfig",
-      configPath
-    );
   }
 
   for (const field of ignoreCompilerOptionsFields) {

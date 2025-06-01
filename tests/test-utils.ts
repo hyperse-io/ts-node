@@ -24,10 +24,15 @@ const runTsScript = <T extends Options>(
   });
 };
 
-export async function runTsCliMock(program: string, ...args: string[]) {
+export async function runTsCliMock(
+  program: string,
+  cwd?: string,
+  ...args: string[]
+) {
   const result = await runTsScript(
     program,
     {
+      cwd,
       env: {
         HPS_TS_NODE_PROJECT: 'tsconfig.json',
       },

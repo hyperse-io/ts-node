@@ -1,8 +1,8 @@
 import { getTsconfig, type TsConfigJsonResolved } from 'get-tsconfig';
-import { basename, resolve } from 'path';
+import { basename, resolve } from 'node:path';
 import { TsConfigNotFoundError } from './errors/index.js';
 
-export class TsConfigJsonLoader {
+export class TsConfigLoader {
   /**
    * The resolved absolute filesystem path to the TypeScript configuration file
    */

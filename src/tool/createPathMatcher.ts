@@ -1,3 +1,4 @@
+import { existsSync } from 'fs';
 import {
   type FileExistsSync,
   matchFromAbsolutePaths,
@@ -17,44 +18,62 @@ import {
  * @param addMatchAll Add a match-all "*" rule if none is present
  * @returns a function that can resolve paths.
  */
-export function createMatchPath(
+export function createPathMatcher(
   absoluteBaseUrl: string,
   paths: Record<string, string[]>,
-  mainFields: Array<string | string[]> = ['main'],
   addMatchAll: boolean = true
 ) {
   const absolutePaths: ReadonlyArray<MappingEntry> = getAbsoluteMappingEntries(
     absoluteBaseUrl,
     paths,
     addMatchAll
-  ).map((s) => {
-    return {
-      ...s,
-      // make sure that `paths` are without file extensions, remove `.js` from the end
-      // 1. paths: { "@hyperse/logger": ['../../src/index.js'] }
-      // 2. paths: { "@hyperse/logger": ['../../src/index.ts'] }
-      // ==> { pattern:'@hyperse/logger', paths:['/Users/tianyingchun/Documents/flatjs-next/dev-kits/packages/logger/src/index']}
-      paths: s.paths.map((p) =>
-        p.replace(/\.(js|jsx|cjs|mjs|ts|tsx|mts|cts)$/gi, '')
-      ),
-    };
-  });
+  )
+    .map((s) => {
+      return {
+        ...s,
+        paths: s.paths.map((p) =>
+          p.replace(/\.(js|jsx|cjs|mjs|ts|tsx|mts|cts)$/gi, '')
+        ),
+      };
+    })
+    .sort((a, b) => b.paths.length - a.paths.length);
 
   return (
     requestedModule: string,
     readJson?: ReadJsonSync,
     fileExists?: FileExistsSync,
-    extensions?: Array<string>
-  ) =>
-    // If the code contains import 'events' and it coincidentally matches the paths baseUrl `/src/events` directory,
-    // it may cause the built-in events module to be incorrectly resolved as a relative module of the project.
-    // NOTE: recommmand config baseUrl:'./' Instead of use `./src`
-    matchFromAbsolutePaths(
+    extensions: Array<string> = [
+      '.ts',
+      '.tsx',
+      '.mts',
+      '.cts',
+      '.js',
+      '.cjs',
+      '.mjs',
+      '.jsx',
+      '.json',
+    ],
+    mainFields: Array<string | string[]> = ['main', 'exports']
+  ) => {
+    const matchFileResolver: FileExistsSync = (filePath: string) => {
+      const fileExistsResult = fileExists
+        ? fileExists(filePath)
+        : existsSync(filePath);
+      return fileExistsResult ?? false;
+    };
+
+    // Make sure request module we have not file extension
+    const requestSepcifier = requestedModule.replace(
+      /\.(js|jsx|cjs|mjs|ts|tsx|mts|cts)$/gi,
+      ''
+    );
+    return matchFromAbsolutePaths(
       absolutePaths,
-      requestedModule,
+      requestSepcifier,
       readJson,
-      fileExists,
+      matchFileResolver,
       extensions,
       mainFields
     );
+  };
 }

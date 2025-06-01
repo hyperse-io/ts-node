@@ -14,7 +14,8 @@
     "tsconfig.json",
     "path alias",
     "path mapping",
-    "swc node"
+    "swc node",
+    "rust ts-node"
   ],
   "repository": {
     "type": "git",
@@ -61,6 +62,11 @@
       "path": "cz-conventional-changelog"
     }
   },
+  "workspaces": [
+    "./",
+    "./e2e/mono/*",
+    "./e2e/normal"
+  ],
   "dependencies": {
     "@swc-node/register": "^1.10.10",
     "@swc/core": "^1.11.29",

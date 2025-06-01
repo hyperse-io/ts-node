@@ -1,16 +1,21 @@
-import { describe, expect, it } from 'vitest';
 import { normalizeParentUrl } from '../../src/tool/normalizeUrl.js';
 
 describe('normalizeUrl', () => {
   it('should return the correct parent url for posix platform', () => {
+    vi.stubGlobal('process', { platform: 'posix' });
+
     const parentUrls: string[] = [
       'file:///Users/tianyingchun/Documents/hyperse-io/ts-node-paths/tests/cli-test-program.ts',
       'file:///Users/tianyingchun/Documents/hyperse-io/ts-node-paths/src/index.ts',
+      '@test/project-a',
+      './src/index.ts',
     ];
 
     const expectedUrls: string[] = [
       '/Users/tianyingchun/Documents/hyperse-io/ts-node-paths/tests/cli-test-program.ts',
       '/Users/tianyingchun/Documents/hyperse-io/ts-node-paths/src/index.ts',
+      '@test/project-a',
+      './src/index.ts',
     ];
 
     parentUrls.forEach((url, index) => {
@@ -26,8 +31,8 @@ describe('normalizeUrl', () => {
     ];
 
     const expectedUrls: string[] = [
-      'C:/Users/tianyingchun/Documents/hyperse-io/ts-node-paths/tests/cli-test-program.ts',
-      'C:/Users/tianyingchun/Documents/hyperse-io/ts-node-paths/src/index.ts',
+      'C:\\Users\\tianyingchun\\Documents\\hyperse-io\\ts-node-paths\\tests\\cli-test-program.ts',
+      'C:\\Users\\tianyingchun\\Documents\\hyperse-io\\ts-node-paths\\src\\index.ts',
     ];
 
     parentUrls.forEach((url, index) => {
