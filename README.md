@@ -9,14 +9,11 @@ Run TypeScript with node without typechecking
   <a aria-label="stable version" href="https://www.npmjs.com/package/@hyperse/ts-node">
     <img alt="stable version" src="https://img.shields.io/npm/v/%40hyperse%2Fts-node?branch=main&label=version&logo=npm&style=flat-quare&labelColor=000000" />
   </a>
-  <a>
-    <img alt="LoC" src="https://img.shields.io/bundlephobia/min/%40hyperse%2Fts-node?style=flat-quare&labelColor=000000" />
-  </a>
   <a aria-label="Top language" href="https://github.com/hyperse-io/ts-node/search?l=typescript">
     <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/hyperse-io/ts-node?style=flat-square&labelColor=000&color=blue">
   </a>
   <a aria-label="Licence" href="https://github.com/hyperse-io/ts-node/blob/main/LICENSE">
-    <img alt="Licence" src="https://img.shields.io/github/license/hyperse-io/ts-node?style=flat-quare&labelColor=000000" />
+    <img alt="Licence" src="https://img.shields.io/github/license/hyperse-io/ts-node-paths?style=flat-quare&labelColor=000000" />
   </a>
 </p>
 
