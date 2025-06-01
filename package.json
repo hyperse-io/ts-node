@@ -1,6 +1,6 @@
 {
   "name": "@hyperse/ts-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Run TypeScript with node without typechecking",
   "keywords": [
     "hyperse",
