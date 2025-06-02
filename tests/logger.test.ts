@@ -1,5 +1,11 @@
 import { Logger, logger, LogLevel } from '../src/logger.js';
 
+function timestamp() {
+  if (process.platform === 'win32') {
+    return /\d{1,2}\/\d{1,2}\/\d{2} \d{1,2}:\d{1,2}/;
+  }
+  return /\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2}/;
+}
 describe('Logger', () => {
   let mockStdout: { write: (str: string) => void };
   let originalEnv: NodeJS.ProcessEnv;
@@ -60,9 +66,8 @@ describe('Logger', () => {
       vi.setSystemTime(now);
 
       logger.info('test message');
-
       expect(mockStdout.write).toHaveBeenCalledWith(
-        expect.stringMatching(/\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2}/)
+        expect.stringMatching(timestamp())
       );
     });
 
@@ -70,9 +75,8 @@ describe('Logger', () => {
       const logger = new Logger({ timestamp: false });
 
       logger.info('test message');
-
       expect(mockStdout.write).toHaveBeenCalledWith(
-        expect.not.stringMatching(/\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2}/)
+        expect.not.stringMatching(timestamp())
       );
     });
   });
@@ -150,7 +154,7 @@ describe('Logger', () => {
 
       logger.info('test message');
       expect(mockStdout.write).toHaveBeenCalledWith(
-        expect.stringMatching(/\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2}/)
+        expect.stringMatching(timestamp())
       );
     });
   });

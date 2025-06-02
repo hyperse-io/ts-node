@@ -1,6 +1,7 @@
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 import { createPathMatcher } from '../../src/tool/createPathMatcher.js';
+import { normalizePlatformPath } from '../test-utils.js';
 
 describe('createPathMatcher', () => {
   const mockBaseUrl = '/project/root';
@@ -37,7 +38,7 @@ describe('createPathMatcher', () => {
     ]);
 
     // mockReadJson return `false`, so try to resolve main fields from package.json
-    expect(result).toBe(
+    expect(normalizePlatformPath(result)).toBe(
       path.join(mockBaseUrl, 'src/utils/helper/dist/index.js')
     );
   });
@@ -56,7 +57,9 @@ describe('createPathMatcher', () => {
     ]);
 
     // Should strip the extension from the path
-    expect(result).toBe(path.join(mockBaseUrl, 'src/lib/module'));
+    expect(normalizePlatformPath(result)).toBe(
+      path.join(mockBaseUrl, 'src/lib/module')
+    );
   });
 
   it('should respect mainFields configuration', () => {
@@ -74,7 +77,9 @@ describe('createPathMatcher', () => {
     );
 
     // Should use the exports field from package.json
-    expect(result).toBe(path.join(mockBaseUrl, 'packages/new/dist/index.js'));
+    expect(normalizePlatformPath(result)).toBe(
+      path.join(mockBaseUrl, 'packages/new/dist/index.js')
+    );
   });
 
   it('should handle addMatchAll option', () => {
@@ -99,7 +104,9 @@ describe('createPathMatcher', () => {
       mockReadJson,
       mockFileExists
     );
-    expect(resultWithMatchAll).toBe(path.join(mockBaseUrl, '@unknown/module'));
+    expect(normalizePlatformPath(resultWithMatchAll)).toBe(
+      path.join(mockBaseUrl, '@unknown/module')
+    );
   });
 
   it('should not interfere with built-in modules', () => {
@@ -114,7 +121,7 @@ describe('createPathMatcher', () => {
 
     // Should still resolve our custom events path
     const customResult = matcher('events/custom', mockReadJson, mockFileExists);
-    expect(customResult).toBe(
+    expect(normalizePlatformPath(customResult)).toBe(
       path.join(mockBaseUrl, 'src/events/custom/dist/index.js')
     );
   });
@@ -128,12 +135,14 @@ describe('createPathMatcher', () => {
     // Mock fileExists to return true for the second path
     const customFileExists = (filePath: string) => {
       console.log('customFileExists:', filePath);
-      return filePath.includes('packages/shared');
+      return filePath.includes(normalizePlatformPath('packages/shared'));
     };
 
     const result = matcher('@shared/module', mockReadJson, customFileExists);
 
     // Should use the first path that exists
-    expect(result).toBe(path.join(mockBaseUrl, 'packages/shared/module'));
+    expect(normalizePlatformPath(result)).toBe(
+      path.join(mockBaseUrl, 'packages/shared/module')
+    );
   });
 });

@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { HpsSpecifierLoader } from '../../src/tool/HpsSpecifierLoader.js';
 import { Tsconfig } from '../../src/tsconfig/index.js';
+import { normalizePlatformPath } from '../test-utils.js';
 
 // Mock the Tsconfig class
 vi.mock('../../src/tsconfig/index.js', () => ({
@@ -46,7 +47,7 @@ describe('HpsSpecifierLoader', () => {
   describe('file URLs', () => {
     it('should return the specifier for valid file URLs', () => {
       // file:///project/root/src/index.ts
-      const fileUrl = `file://${path.resolve('/project/root/src/index.ts')}`;
+      const fileUrl = `file://project/root/src/index.ts`;
       const loader = new HpsSpecifierLoader(fileUrl);
       expect(loader.resolve()).toBe(fileUrl);
     });
@@ -58,7 +59,9 @@ describe('HpsSpecifierLoader', () => {
       const resolved = loader.resolve((filePath: string) =>
         filePath.includes('helper')
       );
-      expect(resolved).toMatch(/\/project\/root\/src\/utils\/helper/);
+      expect(normalizePlatformPath(resolved)).toMatch(
+        normalizePlatformPath('/project/root/src/utils/helper')
+      );
     });
 
     it('should resolve exact path aliases', () => {
@@ -66,23 +69,29 @@ describe('HpsSpecifierLoader', () => {
       const resolved = loader.resolve((filePath: string) => {
         return filePath.includes('config.ts');
       });
-      expect(resolved).toMatch(/\/project\/root\/src\/config$/);
+      expect(normalizePlatformPath(resolved)).toMatch(
+        normalizePlatformPath('/project/root/src/config')
+      );
     });
 
     it('should return original specifier for unknown aliases', () => {
       const loader = new HpsSpecifierLoader('@unknown/module');
-      expect(loader.resolve()).toBe('@unknown/module');
+      expect(normalizePlatformPath(loader.resolve())).toBe(
+        normalizePlatformPath('@unknown/module')
+      );
     });
   });
 
   describe('project directory resolution', () => {
     it('should use parent URL to resolve project directory', () => {
-      const parentUrl = `file://${path.resolve('/project/root/src/index.ts')}`;
+      const parentUrl = `file:///project/root/src/index.ts`;
       const loader = new HpsSpecifierLoader('@utils/helper', parentUrl);
       const resolved = loader.resolve((filePath: string) => {
         return filePath.includes('helper');
       });
-      expect(resolved).toMatch(/\/project\/root\/src\/utils\/helper/);
+      expect(normalizePlatformPath(resolved)).toMatch(
+        normalizePlatformPath('/project/root/src/utils/helper')
+      );
     });
 
     it('should fallback to current working directory when parent URL is invalid', () => {
@@ -90,7 +99,9 @@ describe('HpsSpecifierLoader', () => {
       const resolved = loader.resolve((filePath: string) => {
         return filePath.includes('helper');
       });
-      expect(resolved).toMatch(/\/project\/root\/src\/utils\/helper/);
+      expect(normalizePlatformPath(resolved)).toMatch(
+        normalizePlatformPath('/project/root/src/utils/helper')
+      );
     });
 
     it('should use custom tsconfig path from environment variable', () => {

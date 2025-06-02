@@ -8,6 +8,17 @@ export const getDirname = (url: string, ...paths: string[]) => {
 };
 
 /**
+ * Normalize the path to the platform-specific format without drive letter
+ * @param path - The path to normalize
+ * @returns The normalized path
+ */
+export function normalizePlatformPath(path: string = ''): string {
+  // Remove drive letter like F: using regex: ^\w:
+  return process.platform === 'win32'
+    ? path.replace(/\//g, '\\').replace(/^\w:/, '')
+    : path.replace(/\\/g, '/');
+}
+/**
  * Process execute typescript script file using `@hyperse/ts-node`
  * @param program - The absolute typescript file path
  * @param options - The configuration of `execa` { env: { TS_NODE_PROJECT: tsconfig } }
