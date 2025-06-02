@@ -8,6 +8,8 @@ on:
       - minor
     # Only consider those paths to trigger the action
     paths:
+      - 'src/**'
+      - 'tests/**'
       - 'packages/**'
       - 'package.json'
       - '*.lock'
@@ -27,6 +29,8 @@ on:
       - reopened
     # Only consider those paths to trigger the action
     paths:
+      - 'src/**'
+      - 'tests/**'
       - 'packages/**'
       - 'package.json'
       - '*.lock'
