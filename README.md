@@ -13,7 +13,7 @@ Faster TypeScript/JavaScript transformer without typechecking and node-gyp and p
     <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/hyperse-io/ts-node?style=flat-square&labelColor=000&color=blue">
   </a>
   <a aria-label="Licence" href="https://github.com/hyperse-io/ts-node/blob/main/LICENSE">
-    <img alt="Licence" src="https://img.shields.io/github/license/hyperse-io/ts-node-paths?style=flat-quare&labelColor=000000" />
+    <img alt="Licence" src="https://img.shields.io/github/license/hyperse-io/ts-node?style=flat-quare&labelColor=000000" />
   </a>
 </p>
 
