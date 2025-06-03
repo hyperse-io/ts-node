@@ -41,6 +41,8 @@ export class HpsSpecifierLoader {
 
     // resolve specifier to file path
     const resolvedFilePath = pathMatcher(this.specifier, undefined, fileExists);
+
+    // If failed to resolve, fallback to swc-node resolver, just return the specifier.
     if (!resolvedFilePath) {
       return this.specifier;
     }
