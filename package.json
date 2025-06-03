@@ -1,6 +1,6 @@
 {
   "name": "@hyperse/ts-node",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Fast TypeScript transformer in Node.js using SWC - no type checking",
   "keywords": [
     "hyperse",
