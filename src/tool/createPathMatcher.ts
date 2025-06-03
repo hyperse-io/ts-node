@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 import {
   type FileExistsSync,
   matchFromAbsolutePaths,
@@ -8,6 +8,15 @@ import {
   getAbsoluteMappingEntries,
   type MappingEntry,
 } from 'tsconfig-paths/lib/mapping-entry.js';
+
+/**
+ * Make sure that the specifier does not have a file extension.
+ * @param specifier - The specifier to clean.
+ * @returns The cleaned specifier.
+ */
+const cleanSpecifierExtension = (specifier: string) => {
+  return specifier.replace(/\.(js|jsx|cjs|mjs|ts|tsx|mts|cts)$/gi, '');
+};
 
 /**
  * Creates a function that can resolve paths according to tsconfig paths property.
@@ -31,9 +40,7 @@ export function createPathMatcher(
     .map((s) => {
       return {
         ...s,
-        paths: s.paths.map((p) =>
-          p.replace(/\.(js|jsx|cjs|mjs|ts|tsx|mts|cts)$/gi, '')
-        ),
+        paths: s.paths.map((p) => cleanSpecifierExtension(p)),
       };
     })
     .sort((a, b) => b.paths.length - a.paths.length);
@@ -63,10 +70,7 @@ export function createPathMatcher(
     };
 
     // Make sure request module we have not file extension
-    const requestSepcifier = requestedModule.replace(
-      /\.(js|jsx|cjs|mjs|ts|tsx|mts|cts)$/gi,
-      ''
-    );
+    const requestSepcifier = cleanSpecifierExtension(requestedModule);
     return matchFromAbsolutePaths(
       absolutePaths,
       requestSepcifier,
