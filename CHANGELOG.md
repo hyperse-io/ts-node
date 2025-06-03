@@ -1,5 +1,11 @@
 # @hyperse/ts-node
 
+## 1.0.3
+
+### Patch Changes
+
+- [`951d679`](https://github.com/hyperse-io/ts-node/commit/951d679b0e320008c717aea75176dd3bb856f6e6) Thanks [@tianyingchun](https://github.com/tianyingchun)! - fix swc-node `SWC_NODE_PROJECT` compatibility
+
 ## 1.0.2
 
 ### Patch Changes
