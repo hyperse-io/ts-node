@@ -5,6 +5,8 @@ export {};
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
+      SWC_NODE_PROJECT?: string;
+      HPS_TS_NODE_PROJECT?: string;
       HPS_TS_NODE_LOG_LEVEL?: '0' | '1' | '2' | '3' | '4';
       HPS_TS_NODE_LOG_TIMESTAMP?: 'true' | 'false';
     }
