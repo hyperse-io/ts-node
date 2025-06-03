@@ -74,7 +74,7 @@ export class HpsSpecifierLoader {
 
     // Get options from tsconfig.json
     const tsconfig = new Tsconfig(tsConfigPath);
-    const compilerOptions = tsconfig.getCompilerOptions(projectCwd);
+    const compilerOptions = tsconfig.getCompilerOptions(dirname(tsConfigPath));
 
     return {
       projectCwd,
