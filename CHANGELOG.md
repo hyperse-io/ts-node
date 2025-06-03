@@ -1,5 +1,11 @@
 # @hyperse/ts-node
 
+## 1.0.2
+
+### Patch Changes
+
+- [`cea8af7`](https://github.com/hyperse-io/ts-node/commit/cea8af71a40f8ca46a378b9c15b5f94190f4f9b1) Thanks [@tianyingchun](https://github.com/tianyingchun)! - Fix tsconfig resolution
+
 ## 1.0.1
 
 ### Patch Changes
