@@ -2,7 +2,7 @@ import { builtinModules, isBuiltin } from 'node:module';
 import { dirname, join } from 'node:path';
 import type { FileExistsSync } from 'tsconfig-paths';
 import { logger } from '../logger.js';
-import { Tsconfig } from '../tsconfig/index.js';
+import { TsConfig } from '../tsconfig/index.js';
 import { createPathMatcher } from './createPathMatcher.js';
 import { isValidFileUrl, normalizeParentUrl } from './normalizeUrl.js';
 import { searchProjectDir } from './searchProjectDir.js';
@@ -75,7 +75,7 @@ export class HpsSpecifierLoader {
     );
 
     // Get options from tsconfig.json
-    const tsconfig = new Tsconfig(tsConfigPath);
+    const tsconfig = new TsConfig(tsConfigPath);
     const compilerOptions = tsconfig.getCompilerOptions(dirname(tsConfigPath));
 
     return {

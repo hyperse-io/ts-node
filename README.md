@@ -125,7 +125,6 @@ const result = matcher('@utils/helper', {
 ## Best Practices
 
 1. **Path Aliases**
-
    - Keep aliases simple and intuitive
    - Use consistent naming patterns
    - Avoid conflicts with built-in module names

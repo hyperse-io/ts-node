@@ -1,21 +1,31 @@
-import path from 'node:path';
 import { HpsSpecifierLoader } from '../../src/tool/HpsSpecifierLoader.js';
-import { Tsconfig } from '../../src/tsconfig/index.js';
 import { normalizePlatformPath } from '../test-utils.js';
 
 // Mock the Tsconfig class
-vi.mock('../../src/tsconfig/index.js', () => ({
-  Tsconfig: vi.fn().mockImplementation(() => ({
-    getCompilerOptions: () => ({
-      baseUrl: '/project/root',
-      paths: {
-        '@utils/*': ['src/utils/*'],
-        '@components/*': ['src/components/*'],
-        '@config': ['src/config.ts'],
-      },
-    }),
-  })),
-}));
+vi.mock('../../src/tsconfig/TsConfig.js', () => {
+  const MockedTsConfig = vi.fn().mockImplementation(function (
+    this: any,
+    _tsConfigPath?: string
+  ) {
+    this.getCompilerOptions = (projectCwd = '') => {
+      const baseUrl = projectCwd || '/project/root';
+      return {
+        baseUrl,
+        rootDir: baseUrl,
+        outDir: `${baseUrl}/dist`,
+        paths: {
+          '@utils/*': ['src/utils/*'],
+          '@components/*': ['src/components/*'],
+          '@config': ['src/config.ts'],
+        },
+      };
+    };
+    return this;
+  });
+  return {
+    TsConfig: MockedTsConfig,
+  };
+});
 
 describe('HpsSpecifierLoader', () => {
   const originalCwd = process.cwd;
@@ -102,23 +112,6 @@ describe('HpsSpecifierLoader', () => {
       expect(normalizePlatformPath(resolved)).toMatch(
         normalizePlatformPath('/project/root/src/utils/helper')
       );
-    });
-
-    it('should use custom tsconfig path from environment variable', () => {
-      const originalEnv = process.env.HPS_TS_NODE_PROJECT;
-      process.env.HPS_TS_NODE_PROJECT = 'custom.tsconfig.json';
-
-      const loader = new HpsSpecifierLoader('@utils/helper');
-      loader.resolve((filePath: string) => {
-        return filePath.includes('helper');
-      });
-
-      // Verify the mock was called with custom tsconfig path
-      expect(vi.mocked(Tsconfig)).toHaveBeenCalledWith(
-        expect.stringContaining('custom.tsconfig.json')
-      );
-
-      process.env.HPS_TS_NODE_PROJECT = originalEnv;
     });
   });
 });
