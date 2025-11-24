@@ -1,5 +1,11 @@
 # @hyperse/ts-node
 
+## 1.1.0
+
+### Minor Changes
+
+- [`3147ed0`](https://github.com/hyperse-io/ts-node/commit/3147ed080bfe002852a2b18443b851c051c838c9) Thanks [@tianyingchun](https://github.com/tianyingchun)! - update dependencies and improve tsconfig handling
+
 ## 1.0.3
 
 ### Patch Changes
