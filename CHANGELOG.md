@@ -1,5 +1,11 @@
 # @hyperse/ts-node
 
+## 1.2.0
+
+### Minor Changes
+
+- [`352d978`](https://github.com/hyperse-io/ts-node/commit/352d978ef8ae6177a3e69f6ae2426b4589564142) Thanks [@tianyingchun](https://github.com/tianyingchun)! - Support tsconfig without `baseUrl` (TypeScript 6.0), normalize inherited preset `baseUrl`, and default `TsConfig.getCompilerOptions()` resolution to the tsconfig directory.
+
 ## 1.1.0
 
 ### Minor Changes
