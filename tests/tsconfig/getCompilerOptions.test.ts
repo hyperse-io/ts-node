@@ -58,14 +58,12 @@ describe('get compiler options', () => {
   it('Read "tsconfig.compiler-options.json"', () => {
     expect(() => {
       getCompilerOptions(join(fixtureCwd, './tsconfig.compiler-options.json'));
-    }).toThrowError('`compilerOptions` are missing in "tsconfig.json"!');
+    }).toThrow('`compilerOptions` are missing in "tsconfig.json"!');
   });
 
   it('Read "tsconfig.no-fields.json"', () => {
     expect(() => {
       getCompilerOptions(join(fixtureCwd, './tsconfig.no-fields.json'));
-    }).toThrowError(
-      'Fields `rootDir`, `outDir` are missing in "tsconfig.json"!'
-    );
+    }).toThrow('Fields `rootDir`, `outDir` are missing in "tsconfig.json"!');
   });
 });
