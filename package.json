@@ -55,7 +55,7 @@
     "changeset": "changeset",
     "release": "yarn build && changeset publish",
     "cz": "cz",
-    "prepare": "node -e \"if (!process.env.CI) require('child_process').execSync('husky', {stdio: 'inherit'})\""
+    "husky": "yarn husky"
   },
   "config": {
     "commitizen": {

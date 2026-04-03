@@ -40,8 +40,6 @@ jobs:
           # Be aware of security implications.
           # setupGitUser: true
         env:
-          # Skip git hooks during publish (husky + npm publish can error in CI)
-          HUSKY: "0"
           # See https://github.com/changesets/action/issues/147
           HOME: ${{ github.workspace }}
           # Allows to download / query / comment packages
