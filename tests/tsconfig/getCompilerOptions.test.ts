@@ -65,7 +65,7 @@ describe('get compiler options', () => {
     expect(() => {
       getCompilerOptions(join(fixtureCwd, './tsconfig.no-fields.json'));
     }).toThrowError(
-      'Fields `baseUrl`, `rootDir`, `outDir`, `paths` are missing in "tsconfig.json"!'
+      'Fields `rootDir`, `outDir` are missing in "tsconfig.json"!'
     );
   });
 });

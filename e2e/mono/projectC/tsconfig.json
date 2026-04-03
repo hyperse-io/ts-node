@@ -1,9 +1,14 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "composite": true,
+    "noEmit": false,
+    "rootDir": "src",
+    "outDir": "dist",
     "paths": {
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@utils/print.js": ["./src/utils/print.ts"]
     }
-  }
+  },
+  "include": ["src/**/*.ts"]
 }

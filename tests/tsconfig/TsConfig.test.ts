@@ -22,9 +22,9 @@ describe('test suites of tsconfig', () => {
     expect(tsconfig.path).toBe(join(fixtureCwd, './tsconfig.01.json'));
     const opts = tsconfig.getCompilerOptions();
 
-    expect(opts?.baseUrl).toBe(resolve('./'));
-    expect(opts?.rootDir).toBe(resolve('./src'));
-    expect(opts?.outDir).toBe(resolve('./dist'));
+    expect(opts?.baseUrl).toBe(resolve(fixtureCwd, './'));
+    expect(opts?.rootDir).toBe(resolve(fixtureCwd, './src'));
+    expect(opts?.outDir).toBe(resolve(fixtureCwd, './dist'));
     expect(opts?.paths).toMatchObject({
       '@models/*': ['./models/*'],
       '@tool/*': ['./tool/*'],
@@ -35,9 +35,9 @@ describe('test suites of tsconfig', () => {
     const tsconfig = new TsConfig(join(fixtureCwd, './tsconfig.02.json'));
     const opts = tsconfig.getCompilerOptions();
 
-    expect(opts?.baseUrl).toBe(resolve('./'));
-    expect(opts?.rootDir).toBe(resolve('./src'));
-    expect(opts?.outDir).toBe(resolve('./dist'));
+    expect(opts?.baseUrl).toBe(resolve(fixtureCwd, './'));
+    expect(opts?.rootDir).toBe(resolve(fixtureCwd, './src'));
+    expect(opts?.outDir).toBe(resolve(fixtureCwd, './dist'));
     expect(opts?.paths).toMatchObject({
       '@models/*': ['./models/*'],
       '@tool/*': ['./tool/*'],
@@ -48,9 +48,9 @@ describe('test suites of tsconfig', () => {
     const tsconfig = new TsConfig(join(fixtureCwd, './tsconfig.03.json'));
     const opts = tsconfig.getCompilerOptions();
 
-    expect(opts?.baseUrl).toBe(resolve('./'));
-    expect(opts?.rootDir).toBe(resolve('./src'));
-    expect(opts?.outDir).toBe(resolve('./dist'));
+    expect(opts?.baseUrl).toBe(resolve(fixtureCwd, './'));
+    expect(opts?.rootDir).toBe(resolve(fixtureCwd, './src'));
+    expect(opts?.outDir).toBe(resolve(fixtureCwd, './dist'));
     expect(opts?.paths).toMatchObject({
       '@models/*': ['./models/*'],
       '@tool/*': ['./tool/*'],

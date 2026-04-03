@@ -13,7 +13,6 @@ describe('TsConfigLoader', () => {
     expect(loader.configPath).toBe(rootTsConfigjson);
     expect(config).toMatchObject({
       compilerOptions: {
-        baseUrl: './',
         rootDir: './',
         outDir: './dist',
       },
@@ -46,9 +45,8 @@ describe('TsConfigLoader', () => {
     expect(config.compilerOptions).toMatchObject({
       rootDir: './src',
       outDir: './dist',
-      baseUrl: './src',
       paths: {
-        '@root/*': ['./root/*'],
+        '@root/*': ['./src/root/*'],
       },
     });
     expect(loader.configPath).toBe(

@@ -1,11 +1,15 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@test/project-a": ["../projectA/src/index.ts"],
-      "@test/project-b": ["../projectB/src/index.ts"],
-      "@test/project-c": ["../projectC/src/index.js"]
-    }
-  }
+    "composite": true,
+    "noEmit": false,
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "references": [
+    { "path": "../projectA" },
+    { "path": "../projectB" },
+    { "path": "../projectC" }
+  ],
+  "include": ["src/**/*.ts"]
 }

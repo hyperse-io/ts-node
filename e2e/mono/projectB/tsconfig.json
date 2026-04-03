@@ -1,11 +1,15 @@
 {
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "composite": true,
+    "noEmit": false,
+    "rootDir": "src",
+    "outDir": "dist",
     "paths": {
       "@utils/*": ["./src/utils/*"],
-      "@utils/printb": ["./src/utils/print.ts"],
-      "@test/project-c": ["../projectC/src/index.js"]
+      "@utils/printb": ["./src/utils/print.ts"]
     }
-  }
+  },
+  "references": [{ "path": "../projectC" }],
+  "include": ["src/**/*.ts"]
 }

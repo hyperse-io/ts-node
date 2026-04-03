@@ -6,5 +6,5 @@ type SetRequired<T, K extends keyof T> = Omit<T, K> & {
 
 export type CompilerOptions = SetRequired<
   TsConfigJson.CompilerOptions,
-  'rootDir' | 'outDir' | 'baseUrl' | 'paths'
+  'rootDir' | 'outDir' | 'paths'
 >;

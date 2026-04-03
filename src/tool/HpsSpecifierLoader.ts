@@ -31,12 +31,12 @@ export class HpsSpecifierLoader {
       return this.specifier;
     }
 
-    const { compilerOptions } = this.constructContext();
+    const { projectCwd, compilerOptions } = this.constructContext();
 
     // create tsconfig.json paths based matcher
     const pathMatcher = createPathMatcher(
-      compilerOptions.baseUrl,
-      compilerOptions.paths
+      compilerOptions.baseUrl ?? projectCwd,
+      compilerOptions.paths ?? {}
     );
 
     // resolve specifier to file path

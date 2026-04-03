@@ -1,4 +1,4 @@
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import { getCompilerOptions } from './getCompilerOptions.js';
 
 export class TsConfig {
@@ -21,14 +21,19 @@ export class TsConfig {
 
   /**
    * Normalize the tsconfig.json file path, make sure we have the correct absolute `baseUrl`, `rootDir`, `outDir`.
-   * @param projectCwd - The project root directory.
+   * When `baseUrl` is omitted (TypeScript 6.0+ style), it defaults to the tsconfig directory, matching `paths` resolution.
+   * @param projectCwd - Directory to resolve `rootDir` / `outDir` / `baseUrl` against (default: directory of this tsconfig file).
    * @returns The normalized tsconfig.json options.
    */
-  getCompilerOptions(projectCwd = '') {
+  getCompilerOptions(projectCwd?: string) {
     const opts = getCompilerOptions(this.tsConfigPath);
-    opts.baseUrl = resolve(projectCwd, opts.baseUrl);
-    opts.rootDir = resolve(projectCwd, opts.rootDir);
-    opts.outDir = resolve(projectCwd, opts.outDir);
+    const root =
+      projectCwd !== undefined && projectCwd !== ''
+        ? projectCwd
+        : dirname(resolve(this.tsConfigPath));
+    opts.baseUrl = resolve(root, opts.baseUrl ?? './');
+    opts.rootDir = resolve(root, opts.rootDir);
+    opts.outDir = resolve(root, opts.outDir);
     return opts;
   }
 }

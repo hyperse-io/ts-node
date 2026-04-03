@@ -21,7 +21,7 @@ const cleanSpecifierExtension = (specifier: string) => {
 /**
  * Creates a function that can resolve paths according to tsconfig paths property.
  *
- * @param absoluteBaseUrl Absolute version of baseUrl as specified in tsconfig.
+ * @param absoluteBaseUrl Absolute base for resolving `paths` (legacy `baseUrl`, or tsconfig directory when omitted in TS 6+).
  * @param paths The paths as specified in tsconfig.
  * @param mainFields A list of package.json field names to try when resolving module files. Select a nested field using an array of field names.
  * @param addMatchAll Add a match-all "*" rule if none is present
