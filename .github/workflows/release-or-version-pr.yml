@@ -27,6 +27,12 @@ jobs:
       - name: 📥 Install Dependencies
         run: yarn --frozen-lockfile
 
+      # @changesets/cli only uses `pnpm publish` when pnpm is detected; Yarn repos still run `npm publish`.
+      # npm 10+ can hit arborist "Cannot read properties of null (reading 'package')" on Yarn workspace roots.
+      # @link https://github.com/npm/cli/issues/4787
+      - name: Use npm 9 for publish (changesets invokes npm)
+        run: npm install -g npm@9
+
       # @link https://github.com/changesets/action
       - name: Create Release Pull Request or Publish to npm
         id: changesets
