@@ -17,6 +17,7 @@ on:
       - 'tsconfig.base.json'
       - '.prettier*'
       - '.github/**'
+      - '.nvmrc'
 
   pull_request:
     branches:
@@ -38,16 +39,17 @@ on:
       - 'tsconfig.base.json'
       - '.prettier*'
       - '.github/**'
+      - '.nvmrc'
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
 
-      - name: Use Node.js (latest)
+      - name: Use Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: latest
+          node-version-file: '.nvmrc'
 
       - name: 📥 Install Dependencies
         run: yarn --frozen-lockfile
