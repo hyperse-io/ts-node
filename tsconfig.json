@@ -8,6 +8,6 @@
       "@hyperse/ts-node": ["./src/index.js"]
     }
   },
-  "include": ["scripts/build.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["e2e/**/*"]
 }
