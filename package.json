@@ -76,8 +76,8 @@
     "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.6.0",
-    "@changesets/cli": "^2.30.0",
+    "@changesets/changelog-github": "^1.0.0",
+    "@changesets/cli": "^3.0.0",
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@hyperse/eslint-config-hyperse": "^1.7.0",
@@ -95,7 +95,7 @@
   },
   "packageManager": "yarn@4.13.0",
   "engines": {
-    "node": ">=20"
+    "node": ">=22.11.0"
   },
   "publishConfig": {
     "access": "public"
