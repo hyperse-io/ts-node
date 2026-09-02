@@ -42,6 +42,7 @@ on:
       - '.nvmrc'
 jobs:
   test:
+    if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
